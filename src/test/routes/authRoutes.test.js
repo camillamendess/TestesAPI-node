@@ -1,8 +1,6 @@
 import request from 'supertest';
-import {
-  afterEach, beforeEach, describe, it,
-} from '@jest/globals';
-import app from '../../app.js';
+import { afterEach, beforeEach, describe } from '@jest/globals';
+import app from '../../app';
 
 let servidor;
 beforeEach(() => {
@@ -14,20 +12,20 @@ afterEach(() => {
   servidor.close();
 });
 
-describe('Testando a rota da API Login (POST)', () => {
+describe('Testando a rota login (POST)', () => {
   it('O login deve possuir um email e senha para se autenticar', async () => {
     const loginMock = {
-      email: 'rapha@teste.com.br',
+      email: 'raphael@teste.com.br',
     };
 
     await request(servidor)
       .post('/login')
       .send(loginMock)
       .expect(500)
-      .expect('"A senha de usuario é obrigatório."'); // Corrigir a mensagem conforme o esperado pela API
+      .expect('"A senha de usuario é obrigatório."');
   });
 
-  it('O login deve validar se o usuário está cadastrado', async () => {
+  it('O login deve validar se o usuario esta cadastrado', async () => {
     const loginMock = {
       email: 'raphael.teste@teste.com.br',
       senha: '123456',
@@ -38,7 +36,7 @@ describe('Testando a rota da API Login (POST)', () => {
       .set('Accept', 'application/json')
       .send(loginMock)
       .expect(500)
-      .expect('"Usuario não cadastrado."'); // Sem acentuação para alinhar com a mensagem da API
+      .expect('"Usuario não cadastrado."');
   });
 
   it('O login deve validar email e senha incorreto', async () => {
@@ -52,10 +50,10 @@ describe('Testando a rota da API Login (POST)', () => {
       .set('Accept', 'application/json')
       .send(loginMock)
       .expect(500)
-      .expect('"Usuario ou senha invalido."'); // Sem acentuação para alinhar com a mensagem da API
+      .expect('"Usuario ou senha invalido."');
   });
 
-  it('O login deve validar se está sendo retornado um accessToken', async () => {
+  it('O login deve validar se esta sendo retornado um accessToken', async () => {
     const loginMock = {
       email: 'raphael@teste.com.br',
       senha: '123456',
@@ -67,7 +65,7 @@ describe('Testando a rota da API Login (POST)', () => {
       .send(loginMock)
       .expect(201);
 
-    expect(resposta.body.message).toBe('Usuario conectado'); // Sem acentuação para alinhar com a mensagem da API
+    expect(resposta.body.message).toBe('Usuario conectado');
     expect(resposta.body).toHaveProperty('accessToken');
   });
 });
